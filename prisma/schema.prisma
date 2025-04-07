@@ -1,0 +1,100 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url  	    = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Profile {
+  id String @id @default(cuid())
+  userId String @unique
+  name String
+  imageUrl String @db.Text
+  email String @db.Text
+
+//one to many r/ships as one profile can have many servers
+servers Server[]
+
+// one profile can be member of many servers
+Members Member[]
+
+//one profile can have many channels
+channels Channel[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Server {
+  id String @id @default(cuid())
+  name String
+  imageUrl String @db.Text
+  inviteCode String @unique
+ 
+//who is the creator of the server
+  profileId String
+  profile Profile @relation(fields: [profileId], references: [id], onDelete:Cascade) //when the profile deleted the servers belongs to that profile will be deleted
+
+//one server can have many members
+members Member[]
+
+channels Channel[]
+
+ createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+@@index([profileId])
+
+}
+
+enum MemberRole {
+  ADMIN
+  MODERATOR
+  GUEST
+}
+
+model Member{
+  id String @id @default(cuid())  
+  role MemberRole @default(GUEST)
+
+  profileId String
+  profile Profile @relation(fields: [profileId], references: [id], onDelete:Cascade)
+
+  serverId String
+  server Server @relation(fields: [serverId], references: [id], onDelete:Cascade)
+
+createdAt DateTime @default(now())
+updatedAt DateTime @updatedAt
+
+@@index([profileId])
+@@index([serverId])
+}
+
+enum ChannelType {
+  TEXT
+  AUDIO
+  VIDEO
+}
+
+model Channel{
+  id String @id @default(cuid())
+  name String
+  type ChannelType @default(TEXT)
+
+  profileId String
+  profile Profile @relation(fields: [profileId], references: [id], onDelete:Cascade)
+
+  serverId String
+  server Server @relation(fields: [serverId], references: [id], onDelete:Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([serverId])
+  @@index([profileId])
+}
