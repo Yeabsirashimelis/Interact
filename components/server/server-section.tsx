@@ -33,7 +33,7 @@ export default function ServerSection({
           <button
             className="text-zinc-500 transition hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-300"
             onClick={() => {
-              onOpen("createChannel");
+              onOpen("createChannel", { channelType });
             }}
           >
             <Plus className="h-4 w-4" />
