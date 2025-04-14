@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 export default function DeleteChannelModal() {
   const { onOpen, isOpen, onClose, type, data } = useModal();
-  const isModalOpen = isOpen && type === "deleteServer";
+  const isModalOpen = isOpen && type === "deleteChannel";
   const router = useRouter();
 
   const { server, channel } = data;
@@ -58,7 +58,7 @@ export default function DeleteChannelModal() {
             Are you sure you want to do this? <br />
             <span className="font-semibold text-indigo-500">
               #{channel?.name}
-            </span>
+            </span>{" "}
             will be premanently deleted.
           </DialogDescription>
         </DialogHeader>

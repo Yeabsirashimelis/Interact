@@ -45,13 +45,13 @@ const formSchema = z.object({
   type: z.nativeEnum(ChannelType),
 });
 
-export default function CreateChannelModal() {
+export default function EditChannelModal() {
   const { isOpen, onClose, type, data } = useModal();
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
   const params = useParams();
-  const isModalOpen = isOpen && type === "createChannel";
-  const { channelType } = data;
+  const isModalOpen = isOpen && type === "editChannel";
+  const { channel, server } = data;
 
   useEffect(() => {
     setIsMounted(true);
@@ -59,26 +59,25 @@ export default function CreateChannelModal() {
 
   const form = useForm({
     resolver: zodResolver(formSchema),
-    defaultValues: { name: "", type: channelType || ChannelType.TEXT },
+    defaultValues: { name: "", type: channel?.type || ChannelType.TEXT },
   });
 
   useEffect(() => {
-    if (channelType) {
-      form.setValue("type", channelType);
-    } else {
-      form.setValue("type", ChannelType.TEXT);
+    if (channel) {
+      form.setValue("name", channel.name);
+      form.setValue("type", channel.type);
     }
-  }, []);
+  }, [form]);
 
   const isLoading = form.formState.isSubmitting;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       const url = qs.stringifyUrl({
-        url: "/api/channels",
-        query: { serverId: params?.serverId },
+        url: `/api/channels/${channel?.id}`,
+        query: { serverId: server?.id },
       });
-      await axios.post(url, values);
+      await axios.patch(url, values);
       form.reset();
       router.refresh();
       onClose();
@@ -95,7 +94,7 @@ export default function CreateChannelModal() {
         <DialogContent className="overflow-hidden bg-white p-0 text-black sm:max-w-md">
           <DialogHeader className="px-6 pt-8">
             <DialogTitle className="text-center text-2xl font-bold">
-              Create Channel
+              Edit Channel
             </DialogTitle>
           </DialogHeader>
           <Form {...form}>
@@ -163,7 +162,7 @@ export default function CreateChannelModal() {
                   disabled={isLoading}
                   className="w-full bg-indigo-600 text-white hover:bg-indigo-700"
                 >
-                  {isLoading ? "Creating..." : "Create Channel"}
+                  {isLoading ? "Saving" : "Save"}
                 </Button>
               </DialogFooter>
             </form>
