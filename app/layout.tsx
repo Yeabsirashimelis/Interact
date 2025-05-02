@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/components/providers/Theme-provider";
 import { cn } from "@/lib/utils";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { SocketProvider } from "@/components/providers/socket-provider";
+import QueryProvider from "../components/query-provider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -47,7 +48,7 @@ export default function RootLayout({
           >
             <SocketProvider>
               <ModalProvider />
-              {children}
+              <QueryProvider>{children}</QueryProvider>
             </SocketProvider>
           </ThemeProvider>
         </body>

@@ -6,8 +6,12 @@ interface serverIdPageProps {
   params: { serverId: string };
 }
 
-export default async function ServerIdPage({ params }: serverIdPageProps) {
+export default async function ServerIdPage(
+  propsPromise: Promise<serverIdPageProps>,
+) {
   const profile = await currentProfile();
+  const { params } = await propsPromise;
+  const { serverId } = await params;
 
   if (!profile) {
     return redirect("/sign-in");
@@ -15,7 +19,7 @@ export default async function ServerIdPage({ params }: serverIdPageProps) {
 
   const server = await db.server.findUnique({
     where: {
-      id: params.serverId,
+      id: serverId,
       members: {
         some: {
           profileId: profile.id,

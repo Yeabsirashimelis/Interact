@@ -7,8 +7,15 @@ import { redirect } from "next/navigation";
 // import { UserButton } from "@clerk/nextjs";
 
 const SetupPage = async function name() {
-  const profile = await initialProfile() as { id: string; name: string; imageUrl: string; createdAt: Date; updatedAt: Date; userId: string; email: string; } | null;
-
+  const profile = (await initialProfile()) as {
+    id: string;
+    name: string;
+    imageUrl: string;
+    createdAt: Date;
+    updatedAt: Date;
+    userId: string;
+    email: string;
+  } | null;
 
   const server = await db.server.findFirst({
     where: {
@@ -24,11 +31,7 @@ const SetupPage = async function name() {
     return redirect(`/servers/${server.id}`);
   }
 
-  return <InititalModal/>
-
-
+  return <InititalModal />;
 };
 
 export default SetupPage;
-
-//  
