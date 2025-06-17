@@ -76,7 +76,9 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
       </div>
       <div className="absolute">
         <UploadButton
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           endpoint={endpoint as any}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onClientUploadComplete={(res: any) => {
             const fileUrl = res?.[0].url;
             const fileName = res?.[0].name || "";
