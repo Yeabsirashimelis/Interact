@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 
 type PatchParams = Promise<{ serverId: string }>;
 
-export async function PATCH(
+export const PATCH = async function (
   request: Request,
   { params }: { params: PatchParams },
 ) {
@@ -35,4 +35,4 @@ export async function PATCH(
     }
     return NextResponse.json({ message: "Internal Error" }, { status: 500 });
   }
-}
+};
