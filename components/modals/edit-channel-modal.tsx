@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modal_store";
 import {
   Select,
@@ -49,7 +49,6 @@ export default function EditChannelModal() {
   const { isOpen, onClose, type, data } = useModal();
   const [isMounted, setIsMounted] = useState(false);
   const router = useRouter();
-  const params = useParams();
   const isModalOpen = isOpen && type === "editChannel";
   const { channel, server } = data;
 

@@ -16,7 +16,7 @@ import DeleteMessageModal from "../modals/delete-message-modal";
 
 export const ModalProvider = () => {
   const [isMounted, setIsMounted] = useState(false);
-  const { isOpen, type } = useModal();
+  const { type } = useModal();
 
   useEffect(() => {
     setIsMounted(true);

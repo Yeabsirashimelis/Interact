@@ -2,7 +2,6 @@
 
 import * as z from "zod";
 import axios from "axios";
-import q from "query-string";
 import { useForm } from "react-hook-form";
 import { Member, MemberRole, Profile } from "@prisma/client";
 import { UserAvatar } from "../user-avatar";
@@ -71,7 +70,7 @@ export default function ChatItem({
   };
 
   useEffect(() => {
-    const handleKeyDown = (event: any) => {
+    const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape" || event.keyCode === 27) {
         setIsEditing(false);
       }

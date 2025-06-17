@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 
 interface ChatInputProps {
   apiUrl: string;
-  query: Record<string, any>; //means an object of key of string and value of any type
+  query: Record<string, string | number | boolean>;
   name: string;
   type: "conversation" | "channel";
 }

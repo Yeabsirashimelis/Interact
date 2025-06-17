@@ -18,7 +18,7 @@ import { DialogDescription } from "@radix-ui/react-dialog";
 import { useRouter } from "next/navigation";
 
 export default function DeleteChannelModal() {
-  const { onOpen, isOpen, onClose, type, data } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const isModalOpen = isOpen && type === "deleteChannel";
   const router = useRouter();
 

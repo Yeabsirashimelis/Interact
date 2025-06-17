@@ -8,16 +8,14 @@ import { ChannelType } from "@prisma/client";
 import { redirect } from "next/navigation";
 
 interface ChannelPageProps {
-  params: {
+  params: Promise<{
     serverId: string;
     channelId: string;
-  };
+  }>;
 }
-export default async function ChannelIdPage(
-  propsPromise: Promise<ChannelPageProps>,
-) {
+
+export default async function ChannelIdPage({ params }: ChannelPageProps) {
   const profile = await currentProfile();
-  const { params } = await propsPromise;
   const { serverId, channelId } = await params;
 
   if (!profile) {

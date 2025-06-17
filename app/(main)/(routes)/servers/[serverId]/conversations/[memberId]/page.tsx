@@ -6,22 +6,20 @@ import { getOrCreateConversation } from "@/lib/conversation";
 import { currentProfile } from "@/lib/currentProfile";
 import { db } from "@/lib/db";
 import { RedirectToSignIn } from "@clerk/nextjs";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 
-interface MemberIdPageProps {
-  params: {
-    memberId: string;
+interface MemberIdProps {
+  params: Promise<{
     serverId: string;
-  };
-  searchParams: {
-    video?: boolean;
-  };
+    memberId: string;
+  }>;
 }
 
-export default async function MemeberIdPage(
-  propsPromise: Promise<MemberIdPageProps>,
+// ✅ Use the correct Next.js compatible type — no custom interface needed!
+export default async function MemberIdPage(
+  { params }: MemberIdProps,
+  searchParams: { [key: string]: string | string[] | undefined },
 ) {
-  const { params, searchParams } = await propsPromise;
   const { memberId, serverId } = await params;
   const profile = await currentProfile();
 
@@ -65,10 +63,9 @@ export default async function MemeberIdPage(
         serverId={serverId}
         type="conversation"
       />
-      {searchParams.video && (
+      {searchParams.video ? (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
-      )}
-      {!searchParams.video && (
+      ) : (
         <>
           <ChatMessages
             member={currentMember}

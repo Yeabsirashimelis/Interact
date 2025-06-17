@@ -44,6 +44,7 @@ export default function InviteModal() {
 
       onOpen("invite", { server: response.data });
     } catch (error) {
+      console.log(error);
     } finally {
       setIsLoading(false);
     }

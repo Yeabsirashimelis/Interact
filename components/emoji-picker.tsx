@@ -26,7 +26,9 @@ export default function EmojiPicker({ onchange }: EmojiPickerProps) {
         <Picker
           theme={resolvedTheme}
           data={data}
-          onEmojiSelect={(emoji: any) => onchange?.(emoji.native)}
+          onEmojiSelect={(emoji: { native: string }) =>
+            onchange?.(emoji.native)
+          }
         />
       </PopoverContent>
     </Popover>

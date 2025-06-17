@@ -15,12 +15,10 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import axios from "axios";
 import { DialogDescription } from "@radix-ui/react-dialog";
-import { useRouter } from "next/navigation";
 
 export default function DeleteMessageModal() {
-  const { onOpen, isOpen, onClose, type, data } = useModal();
+  const { isOpen, onClose, type, data } = useModal();
   const isModalOpen = isOpen && type === "deleteMessage";
-  const router = useRouter();
 
   const { apiUrl, query } = data;
 

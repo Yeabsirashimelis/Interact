@@ -1,8 +1,8 @@
 "use client";
 
+import { UploadButton } from "@/utils/uploadthing";
 import { Cloud, FileIcon, X } from "lucide-react";
 import Image from "next/image";
-import { UploadButton } from "@uploadthing/react";
 import { useState } from "react";
 
 interface FileUploadProps {
@@ -77,7 +77,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
       <div className="absolute">
         <UploadButton
           endpoint={endpoint as any}
-          onClientUploadComplete={(res) => {
+          onClientUploadComplete={(res: any) => {
             const fileUrl = res?.[0].url;
             const fileName = res?.[0].name || "";
             const extension = fileName.split(".").pop()?.toLowerCase() || null;
@@ -90,10 +90,7 @@ export const FileUpload = ({ onChange, value, endpoint }: FileUploadProps) => {
           onUploadError={(error: Error) => {
             console.log(error);
           }}
-          className={{
-            container: "h-20 w-20 opacity-0",
-            button: "h-20 w-20 cursor-pointer",
-          }}
+          className="h-20 w-20 cursor-pointer opacity-0"
         />
       </div>
     </div>

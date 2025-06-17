@@ -2,15 +2,14 @@ import { currentProfile } from "@/lib/currentProfile";
 import { db } from "@/lib/db";
 import { redirect } from "next/navigation";
 
-interface serverIdPageProps {
-  params: { serverId: string };
+interface ServerIdPageProps {
+  params: Promise<{
+    serverId: string;
+  }>;
 }
 
-export default async function ServerIdPage(
-  propsPromise: Promise<serverIdPageProps>,
-) {
+export default async function ServerIdPage({ params }: ServerIdPageProps) {
   const profile = await currentProfile();
-  const { params } = await propsPromise;
   const { serverId } = await params;
 
   if (!profile) {
@@ -44,5 +43,5 @@ export default async function ServerIdPage(
     return null;
   }
 
-  return redirect(`/servers/${params.serverId}/channels/${initialChannel?.id}`);
+  return redirect(`/servers/${serverId}/channels/${initialChannel.id}`);
 }

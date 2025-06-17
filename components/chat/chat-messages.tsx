@@ -4,12 +4,13 @@ import { Member, Message, Profile } from "@prisma/client";
 import ChatWelcome from "./chat-welcome";
 import { useChatQuery } from "@/hooks/use-chat-query";
 import { Loader2, ServerCrash } from "lucide-react";
-import { group } from "console";
 import { Fragment, useRef, ElementRef } from "react";
 import { format } from "date-fns";
 import ChatItem from "./chat-item";
 import { useChatSocket } from "@/hooks/use-chat-socket";
 import { useChatScroll } from "@/hooks/use-chat-scroll";
+
+// Removed: `import { group } from "console";` — not used.
 
 const DATE_FORMAT = "d MMM yyyy, HH:mm";
 
@@ -29,6 +30,22 @@ interface ChatMessagesProps {
   paramKey: "channelId" | "conversationId";
   paramValue: string;
   type: "channel" | "conversation";
+}
+
+interface ChatPage {
+  items: MessageWithMemberWithProfile[];
+}
+
+interface ChatQueryResult {
+  status: "loading" | "error" | "success" | "pending";
+  data:
+    | {
+        pages: ChatPage[];
+      }
+    | undefined;
+  fetchNextPage: () => void;
+  hasNextPage: boolean;
+  isFetchingNextPage: boolean;
 }
 
 export default function ChatMessages({
@@ -55,26 +72,18 @@ export default function ChatMessages({
       apiUrl,
       paramKey,
       paramValue,
-    }) as {
-      status: "loading" | "error" | "success" | "pending";
-      data: any;
-      fetchNextPage: any;
-      hasNextPage: any;
-      isFetchingNextPage: any;
-    };
-
-  console.log(status);
+    }) as ChatQueryResult;
 
   useChatSocket({ queryKey, addKey, updateKey });
   useChatScroll({
     chatRef,
     bottomRef,
     loadmore: fetchNextPage,
-    shouldLoadMore: !isFetchingNextPage && !hasNextPage,
+    shouldLoadMore: !isFetchingNextPage && hasNextPage,
     count: data?.pages?.[0]?.items?.length ?? 0,
   });
 
-  if (status === "pending") {
+  if (status === "pending" || status === "loading") {
     return (
       <div className="flex flex-1 flex-col items-center justify-center">
         <Loader2 className="my-4 h-7 w-7 animate-spin text-zinc-500" />
@@ -95,10 +104,12 @@ export default function ChatMessages({
       </div>
     );
   }
+
   return (
     <div ref={chatRef} className="flex flex-1 flex-col overflow-y-auto py-4">
       {!hasNextPage && <div className="flex-1" />}
       {!hasNextPage && <ChatWelcome type={type} name={name} />}
+
       {hasNextPage && (
         <div className="flex justify-center">
           {isFetchingNextPage ? (
@@ -113,10 +124,11 @@ export default function ChatMessages({
           )}
         </div>
       )}
+
       <div className="mt-auto flex flex-col-reverse">
-        {data?.pages?.map((group: any, i: any) => (
+        {data?.pages?.map((page, i) => (
           <Fragment key={i}>
-            {group.items.map((message: MessageWithMemberWithProfile) => (
+            {page.items.map((message) => (
               <ChatItem
                 key={message.id}
                 id={message.id}
@@ -134,6 +146,7 @@ export default function ChatMessages({
           </Fragment>
         ))}
       </div>
+
       <div ref={bottomRef} />
     </div>
   );
