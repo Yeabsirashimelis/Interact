@@ -16,10 +16,13 @@ interface MemberIdProps {
 }
 
 // ✅ Use the correct Next.js compatible type — no custom interface needed!
-export default async function MemberIdPage(
-  { params }: MemberIdProps,
-  searchParams: { [key: string]: string | string[] | undefined },
-) {
+export default async function MemberIdPage({
+  params,
+  searchParams,
+}: {
+  params: { serverId: string; memberId: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const { memberId, serverId } = await params;
   const profile = await currentProfile();
 
@@ -63,7 +66,7 @@ export default async function MemberIdPage(
         serverId={serverId}
         type="conversation"
       />
-      {searchParams.video ? (
+      {searchParams?.video ? (
         <MediaRoom chatId={conversation.id} video={true} audio={true} />
       ) : (
         <>
