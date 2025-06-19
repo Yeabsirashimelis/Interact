@@ -19,6 +19,11 @@ const ioHandler = (req: NextApiRequest, res: NextApiResponseServerIo) => {
     const io = new ServerIO(httpServer, {
       path: path,
       addTrailingSlash: false,
+      cors: {
+        origin: ["https://interact-zeta.vercel.app"],
+        methods: ["GET", "POST"],
+        credentials: true,
+      },
     });
     res.socket.server.io = io;
   }
