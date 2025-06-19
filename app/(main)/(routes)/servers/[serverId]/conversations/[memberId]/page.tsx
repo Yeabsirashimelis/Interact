@@ -8,12 +8,12 @@ import { db } from "@/lib/db";
 import { RedirectToSignIn } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
-interface MemberIdProps {
-  params: Promise<{
-    serverId: string;
-    memberId: string;
-  }>;
-}
+// interface MemberIdProps {
+//   params: Promise<{
+//     serverId: string;
+//     memberId: string;
+//   }>;
+// }
 
 // ✅ Use the correct Next.js compatible type — no custom interface needed!
 export default async function MemberIdPage({
